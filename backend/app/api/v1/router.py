@@ -63,7 +63,7 @@ async def agent_chat(payload: AgentChatRequest, request: Request):
     if not messages:
         messages = [HumanMessage(content="")]
 
-    result = graph.invoke(
+    result = await graph.ainvoke(
         {
             "messages": messages,
             "intent": None,
