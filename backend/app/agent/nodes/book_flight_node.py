@@ -1,13 +1,13 @@
 from typing import Dict, Any
-from langchain_openai import ChatOpenAI
 from app.agent.state import AgentState
 from app.agent.tools.flight_tools import book_flight_tool
 from langchain_core.messages import SystemMessage, ToolMessage
+from app.core.llm import get_chat_llm
 
 def book_flight_node(state: AgentState) -> Dict[str, Any]:
     """Node to execute flight booking."""
     tools = [book_flight_tool]
-    llm = ChatOpenAI(model="gpt-4o-mini", temperature=0).bind_tools(tools)
+    llm = get_chat_llm(temperature=0).bind_tools(tools)
     
     system_msg = SystemMessage(content=f"You are a tool caller. The user ID is {state.get('user_id', 'unknown')}. Call the book_flight_tool with the requested flight number.")
     messages = [system_msg] + state["messages"]

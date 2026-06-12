@@ -1,13 +1,13 @@
 from typing import Dict, Any
 from langchain_core.messages import SystemMessage
-from langchain_openai import ChatOpenAI
 from app.agent.state import AgentState
 from app.agent.prompts.intent_prompt import INTENT_SYSTEM_PROMPT
+from app.core.llm import get_chat_llm
 import json
 
 def intent_node(state: AgentState) -> Dict[str, Any]:
     """Node to classify the user's intent."""
-    llm = ChatOpenAI(model="gpt-4o-mini", temperature=0)
+    llm = get_chat_llm(temperature=0)
     messages = [SystemMessage(content=INTENT_SYSTEM_PROMPT)] + state["messages"]
     
     response = llm.invoke(messages)

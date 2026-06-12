@@ -1,14 +1,13 @@
 from typing import Dict, Any
-from langchain_openai import ChatOpenAI
 from app.agent.state import AgentState
 from app.agent.tools.flight_tools import search_flight_tool
 from langchain_core.messages import SystemMessage, ToolMessage
-from langgraph.prebuilt import ToolNode
+from app.core.llm import get_chat_llm
 
 def search_flight_node(state: AgentState) -> Dict[str, Any]:
     """Node to execute flight search."""
     tools = [search_flight_tool]
-    llm = ChatOpenAI(model="gpt-4o-mini", temperature=0).bind_tools(tools)
+    llm = get_chat_llm(temperature=0).bind_tools(tools)
     
     # We ask the LLM to extract parameters and call the search tool
     system_msg = SystemMessage(content="You are a tool caller. Extract flight details from the user's message and call the search_flight_tool.")
